@@ -1,0 +1,16 @@
+Tutorial video 1 url: https://www.youtube.com/watch?v=__QEPUdnJS0&list=PLmZPx_9ZF_sB7aBEa4UV8qX3Oi3tBElpN&index=1
+Tutorial video 2 url: https://www.youtube.com/watch?v=gA-uNj2FgdM&t=874s
+
+TOPICS:
+
+1.Project setup and watch mode
+
+2.Expect statements
+
+3.Coverage
+
+npm test -- --coverage
+
+4.Snapshots
+
+5.Project setup for mocking asynchronous function with axios
