@@ -14,3 +14,24 @@ npm test -- --coverage
 4.Snapshots
 
 5.Project setup for mocking asynchronous function with axios
+
+
+Also covered topics from jest documentation mock functions section
+
+https://jestjs.io/docs/mock-functions#mock-property
+
+1.Using a mock function
+
+2..mock property
+
+3.Mock Return Values
+
+4.Mocking Modules
+
+5.Mocking Partials
+
+6.Mock Implementation
+
+
+
+

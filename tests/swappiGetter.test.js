@@ -16,3 +16,4 @@ describe("swappiGetter GET api test", () => {
         expect(mockAxios.get).toHaveBeenCalledTimes(1);
     })
 })
+
