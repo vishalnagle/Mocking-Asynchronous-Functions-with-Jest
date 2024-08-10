@@ -1,0 +1,89 @@
+In Jest, both mocks and spyOn are tools used to control, monitor, and verify the behavior of functions or methods during testing. 
+However, they serve slightly different purposes and are used in different contexts. 
+Here’s a breakdown of their differences:
+
+1. Mocks:
+
+Purpose: Mocks are used to replace entire functions or modules with a mock implementation. 
+They allow you to fully control what a function returns or how it behaves during a test.
+
+How It's Used: You can create mock functions using jest.fn() or mock entire modules using jest.mock().
+
+Typical Use Case: Use mocks when you want to completely replace a function or module’s implementation. 
+This is useful when you want to simulate behavior, control outputs, or test code in isolation without relying on the actual implementation.
+
+
+Example of Mocking a Function
+
+const fetchData = jest.fn().mockReturnValue(Promise.resolve('data'));
+
+test('fetchData should return mocked data', async () => {
+  const data = await fetchData();
+  expect(data).toBe('data');
+});
+
+
+Example of Mocking a Module
+
+jest.mock('./api', () => ({
+  getData: jest.fn().mockResolvedValue('mocked data'),
+}));
+
+import { getData } from './api';
+
+test('getData should return mocked data from module', async () => {
+  const data = await getData();
+  expect(data).toBe('mocked data');
+});
+
+
+2. spyOn:
+
+Purpose: spyOn is used to monitor calls to an existing method on an object without completely replacing its implementation (although you can modify it if needed). 
+It allows you to observe how the method is used, including how many times it’s called, what arguments it’s called with, and more.
+
+How It's Used: You use jest.spyOn(object, 'method') to create a spy on a specific method of an object.
+
+Typical Use Case: Use spyOn when you want to track or verify the behavior of a method without necessarily replacing it, or when you want to mock just one specific method of an object rather than the entire object or module.
+
+Example of spyOn
+
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+}
+
+test('add method should be called with correct arguments', () => {
+  const calculator = new Calculator();
+  const spy = jest.spyOn(calculator, 'add');
+
+  calculator.add(1, 2);
+
+  expect(spy).toHaveBeenCalled();
+  expect(spy).toHaveBeenCalledWith(1, 2);
+  spy.mockRestore();
+});
+
+Key Differences:
+
+1.Scope:
+
+Mocks: Can replace entire functions or modules. You create mock implementations that do not rely on the original implementation.
+spyOn: Focuses on monitoring and (optionally) modifying an existing method. The original method is still accessible unless explicitly modified.
+
+2.Control Over Implementation:
+
+Mocks: You define what the mock function does from scratch. The original implementation is not used at all.
+spyOn: The original method can still run unless you mock its implementation using mockImplementation, mockReturnValue, etc.
+
+3.Use Case:
+
+Mocks: Best when you need to replace entire functions or modules, especially for isolating tests from dependencies.
+spyOn: Best when you need to observe interactions with a method or partially mock the method within its original context.
+
+Summary
+
+Mocks allow you to replace and fully control functions or modules.
+spyOn allows you to monitor and optionally modify an existing method without fully replacing it.
+

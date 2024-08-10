@@ -1,0 +1,106 @@
+In Jest, spyOn is a utility function used to "spy" on or monitor the behavior of a method on an object. 
+This is particularly useful in unit testing when you want to observe or control how a particular function or method is called during a test, without altering the method's actual implementation.
+
+When and Why spyOn is Used
+
+Monitoring Function Calls: You can check if a method was called, how many times it was called, and with what arguments.
+Mocking Return Values: You can override the method's implementation temporarily to return specific values, which helps in isolating the function under test.
+Preventing Side Effects: By spying on methods, you can prevent them from executing their real behavior, avoiding unwanted side effects like network requests or state changes.
+
+How spyOn Works
+
+Spying on a Method: When you spy on a method, Jest creates a mock function that wraps the original method. This allows you to monitor its calls.
+Restoring the Original Method: After the test, the original method can be restored using mockRestore.
+
+Example 1: Monitoring Function Calls
+
+Suppose you have a Calculator class with a method add.
+
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+}
+
+test('add method should be called with correct arguments', () => {
+  const calculator = new Calculator();
+  const spy = jest.spyOn(calculator, 'add');
+  
+  calculator.add(1, 2);
+
+  expect(spy).toHaveBeenCalled();
+  expect(spy).toHaveBeenCalledWith(1, 2);
+  spy.mockRestore();
+});
+
+
+In this example:
+
+jest.spyOn(calculator, 'add') creates a spy on the add method of the Calculator class.
+expect(spy).toHaveBeenCalled() checks if the method was called.
+expect(spy).toHaveBeenCalledWith(1, 2) checks if the method was called with the arguments 1 and 2.
+spy.mockRestore() restores the original method after the test.
+
+Example 2: Mocking a Method's Return Value
+
+You might want to test a method that relies on another method. 
+Instead of calling the real method, you can mock its return value.
+
+class UserService {
+  fetchUser() {
+    // Imagine this method fetches user data from an API
+    return { id: 1, name: 'John Doe' };
+  }
+
+  getUserName() {
+    const user = this.fetchUser();
+    return user.name;
+  }
+}
+
+test('getUserName should return mocked user name', () => {
+  const service = new UserService();
+  const spy = jest.spyOn(service, 'fetchUser').mockReturnValue({ id: 1, name: 'Jane Doe' });
+
+  const userName = service.getUserName();
+
+  expect(userName).toBe('Jane Doe');
+  spy.mockRestore();
+});
+
+In this example:
+
+jest.spyOn(service, 'fetchUser').mockReturnValue({ id: 1, name: 'Jane Doe' }) spies on the fetchUser method and overrides its return value.
+The getUserName method returns the mocked name 'Jane Doe'.
+
+Example 3: Preventing a Method from Running
+
+You can also use spyOn to prevent a method from running its actual implementation.
+
+class Logger {
+  log(message) {
+    console.log(message);
+  }
+}
+
+test('log method should not actually log', () => {
+  const logger = new Logger();
+  const spy = jest.spyOn(logger, 'log').mockImplementation(() => {});
+
+  logger.log('Hello, World!');
+
+  expect(spy).toHaveBeenCalled();
+  spy.mockRestore();
+});
+
+
+In this example:
+
+jest.spyOn(logger, 'log').mockImplementation(() => {}) creates a spy on the log method and prevents it from logging to the console by replacing it with an empty function.
+
+Conclusion
+
+spyOn is a powerful tool in Jest for monitoring and controlling method behavior during testing. 
+It is particularly useful when you want to test interactions between methods, mock return values, or avoid side effects in unit tests.
+
+

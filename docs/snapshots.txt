@@ -1,0 +1,41 @@
+Snapshots in Jest are a feature used to capture the rendered output of a component (or any other serializable value) at a particular point in time. 
+These snapshots are saved as text files and can be used to ensure that the output of a component or function doesn't unexpectedly change over time.
+
+How Snapshots Work:
+
+When a test that includes a snapshot is run for the first time, Jest creates a snapshot file in a __snapshots__ folder adjacent to the test file.
+The snapshot file contains a serialized version of the output (often the rendered HTML structure of a React component).
+In subsequent test runs, Jest compares the current output to the saved snapshot.
+If the output has changed, Jest will either update the snapshot (if instructed) or fail the test, indicating a potential issue.
+
+Common Use Cases:
+
+1.UI Component Testing (especially in React):
+
+Snapshots are most commonly used in testing UI components to verify that the rendered output does not change unexpectedly. 
+For instance, if you're rendering a button component, a snapshot can capture the HTML output, including its structure, classes, and any dynamic content.
+
+2.Regression Testing:
+
+Snapshots help ensure that code changes do not unintentionally alter the output of components. If the output does change, developers can decide whether the change is expected (in which case they update the snapshot) or a bug (in which case they need to fix the code).
+
+3.Configuration Files or JSON Outputs:
+
+Snapshots can also be used to test any serializable output, like configuration files, JSON objects, or even large strings.
+
+Best Practices:
+
+1.Be Selective: Not all parts of an application should be snapshot-tested. 
+It's best to use snapshots for components that are stable and have a predictable output.
+
+2.Keep Snapshots Readable: Large or complex snapshots can be hard to understand, so it's a good idea to limit the size and complexity of what you're snapshot testing.
+
+3.Manual Reviews: Developers should review snapshot updates to ensure changes are intentional and not indicative of bugs.
+
+Overall, snapshots in Jest are a powerful tool for catching unintended changes in the codebase, particularly in UI components, making them a valuable addition to a testing strategy.
+
+
+
+
+
+

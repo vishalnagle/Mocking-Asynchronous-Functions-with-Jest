@@ -1,0 +1,100 @@
+Mocking in Jest is a technique used to replace a function or module with a fake implementation during testing. 
+This allows you to control the behavior of the code you're testing, making it easier to isolate and verify specific logic. 
+Mocking is particularly useful when testing components or functions that rely on external dependencies, such as APIs, databases, or other modules, which may not be readily available or may introduce variability into your tests.
+
+
+Common Scenarios Where Mocking is Used
+
+1.Mocking API Calls: When your code makes an HTTP request to an API, you can mock the network request to return a controlled response, avoiding the need for actual API interaction.
+
+2.Mocking Modules: You can mock entire modules to control their behavior, especially when they are external libraries that you don't want to test directly.
+
+3.Mocking Timers: If your code uses setTimeout, setInterval, or any time-based functions, you can mock timers to fast-forward or control time in your tests.
+
+4.Mocking Functions: Sometimes, you may want to replace a specific function in a module with a mock implementation to control its output during testing.
+
+
+Example 1: Mocking API Calls
+
+// module: api.js
+export const fetchData = () => {
+  return fetch('https://api.example.com/data')
+    .then(response => response.json());
+};
+
+// test: api.test.js
+import { fetchData } from './api';
+
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ data: 'mocked data' }),
+  })
+);
+
+test('fetchData returns mocked data', async () => {
+  const data = await fetchData();
+  expect(data).toEqual({ data: 'mocked data' });
+});
+
+
+Example 2: Mocking a Module
+
+// module: math.js
+export const add = (a, b) => a + b;
+export const multiply = (a, b) => a * b;
+
+// test: math.test.js
+import * as math from './math';
+
+jest.mock('./math');
+
+test('mocking multiply function', () => {
+  math.multiply.mockReturnValue(10);
+
+  expect(math.multiply(2, 5)).toBe(10);
+});
+
+
+
+Example 3: Mocking Timers
+
+// module: timer.js
+export const startTimer = (callback) => {
+  setTimeout(() => {
+    callback();
+  }, 1000);
+};
+
+// test: timer.test.js
+import { startTimer } from './timer';
+
+jest.useFakeTimers();
+
+test('startTimer calls callback after 1 second', () => {
+  const callback = jest.fn();
+
+  startTimer(callback);
+  jest.advanceTimersByTime(1000);
+
+  expect(callback).toHaveBeenCalledTimes(1);
+});
+
+
+Example 4: Mocking a Function
+
+// module: utils.js
+export const calculate = (a, b) => a + b;
+
+// test: utils.test.js
+import { calculate } from './utils';
+
+jest.spyOn('./utils', 'calculate').mockImplementation(() => 42);
+
+test('calculate returns mocked value', () => {
+  expect(calculate(1, 2)).toBe(42);
+});
+
+In these examples, mocking allows you to control the behavior of your code's dependencies, 
+making it easier to test specific scenarios without relying on actual implementations that may be slow, unreliable, or unnecessary for the test at hand.
+
+
